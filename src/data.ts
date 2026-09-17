@@ -10,6 +10,39 @@ export const config = {
   saturdayNoon: 'SÁBADOS AL MEDIODÍA · POSIBLE APERTURA ESPECIAL',
 }
 
+// Keep replaceable visual assets in one place so the temporary artwork can be
+// swapped for the bar's own photography without changing the layout.
+export const visualAssets = {
+  hero: '/images/vermut/vermut de grifo.png',
+  vermut: '/images/vermut/vermut de grifo.png',
+  gildas: '/images/gildas/gilda vera.png',
+  copas: '',
+} as const
+
+export const experienceCards = [
+  {
+    id: 'vermut',
+    title: 'Vermut',
+    description: 'De barra o de la casa, para empezar la tarde sin prisa.',
+    image: visualAssets.vermut,
+    label: 'DE BARRA · DE LA CASA',
+  },
+  {
+    id: 'gildas',
+    title: 'Gildas',
+    description: 'Clásicas, hot y de autor. Una para abrir boca, otra para quedarse.',
+    image: visualAssets.gildas,
+    label: 'PINCHOS · ENCURTIDOS',
+  },
+  {
+    id: 'copas',
+    title: 'Copas',
+    description: 'Combinados, cervezas y otra ronda cuando cae la tarde.',
+    image: visualAssets.copas,
+    label: 'TARDEO · OTRA RONDA',
+  },
+] as const
+
 export type MenuItem = { name: string; description: string; price: string; image?: string }
 
 export const gildas: MenuItem[] = [
@@ -110,7 +143,8 @@ export const gildaOfMonth = {
 }
 
 export const events: { date: string; time: string; title: string; description: string; category: string; image: string; cta: string }[] = [
-  { date: 'FECHA POR CONFIRMAR', time: 'DESDE LAS 18H', title: 'TARDEO DE TATUAJES', description: 'Tatuajes profesionales por mi artista favorita. Diseños personalizados y únicos. Amplia selección de estilos. Ambiente seguro y esterilizado. 40 € por tatuaje.', category: 'TARDEO · TATUAJES', image: '/images/eventos/evento tattoo.png', cta: 'VEN A VERA' },
-  { date: 'PRÓXIMO JUEVES', time: 'DESDE LAS 19H', title: 'CREA TU GILDA', description: 'Diseña tu propia gilda de autor, participa en la votación popular y haz que la ganadora se quede en carta un mes. Inscripciones en barra o por DM.', category: 'EVENTO · CONCURSO', image: '/images/eventos/crear tu gilda.jpg', cta: 'VEN A VERA' },
-  { date: 'FECHA', time: 'HORA', title: 'TARDE ESPECIAL', description: 'Una tarde con su propio cartel.', category: 'TARDEO', image: '', cta: 'SABER MÁS' },
+  { date: 'FECHA POR CONFIRMAR', time: 'DESDE LAS 18H', title: 'TARDEO DE TATUAJES', description: 'Tatuajes profesionales por mi artista favorita. Diseños personalizados y únicos. Amplia selección de estilos. Ambiente seguro y esterilizado. 40 € por tatuaje.', category: 'TARDEO · TATUAJES', image: '/images/eventos/evento tattoo.jpg', cta: 'VEN A VERA' },
+  { date: 'PRÓXIMO JUEVES', time: 'DESDE LAS 19H', title: 'CREA TU GILDA', description: 'Diseña tu propia gilda de autor, participa en la votación popular y haz que la ganadora se quede en carta un mes. Inscripciones en barra o por DM.', category: 'EVENTO · CONCURSO', image: '/images/eventos/Evento gilda.jpg', cta: 'VEN A VERA' },
+  { date: 'PRÓXIMAMENTE', time: 'HORA POR CONFIRMAR', title: 'TAROT EN VERA', description: 'Una tarde de cartas, intuición y conversación en el bar.', category: 'PRÓXIMO · TAROT', image: '/images/eventos/Evento tarot.jpg', cta: 'VEN A VERA' },
+  { date: 'PRÓXIMAMENTE', time: 'HORA POR CONFIRMAR', title: 'BINGO EN VERA', description: 'Bingo, premios y una excusa más para alargar la tarde.', category: 'PRÓXIMO · BINGO', image: '/images/eventos/Evento bingo.jpg', cta: 'VEN A VERA' },
 ]
