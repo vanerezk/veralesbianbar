@@ -1,28 +1,41 @@
 import { useEffect, useState } from 'react'
-import { config, events, experienceCards, gildaOfMonth, gildas, menu, vermuts, visualAssets } from './data'
-
-const Arrow = () => <span aria-hidden="true">↗</span>
-const VeraSpark = () => <span className="vera-spark" aria-hidden="true" />
+import { Countdown } from './components/Countdown'
+import { Arrow, VeraSpark } from './components/Decorative'
+import { EventsSection } from './components/EventsSection'
+import { FinalCta } from './components/FinalCta'
+import { Header } from './components/Header'
+import { Hero } from './components/Hero'
+import { InstagramSection } from './components/InstagramSection'
+import { LocationSection } from './components/LocationSection'
+import { MenuSection } from './components/MenuSection'
+import { DrinkModal, EventModal } from './components/Modals'
+import { config, events, experienceCards, gildaOfMonth, gildas, vermuts } from './data'
 
 function App() {
   const [activeTab, setActiveTab] = useState('Gildas')
+  const [activeSection, setActiveSection] = useState('eventos')
   const [menuOpen, setMenuOpen] = useState(false)
   const [selectedDrink, setSelectedDrink] = useState<(typeof vermuts)[number] | null>(null)
   const [selectedEvent, setSelectedEvent] = useState<(typeof events)[number] | null>(null)
-  const tabs = Object.keys(menu)
+  const [showUpcoming, setShowUpcoming] = useState(false)
   const closeMenu = () => setMenuOpen(false)
-  const openingTarget = new Date('2026-11-05T18:00:00+01:00').getTime()
+  const whatsappNumber = config.whatsappPhone.replace(/\D/g, '')
+  const whatsappUrl = whatsappNumber.length >= 9 ? `https://wa.me/${whatsappNumber}` : null
+  const openingTarget = new Date(config.openingDate).getTime()
   const [countdown, setCountdown] = useState(() => Math.max(0, openingTarget - Date.now()))
+
   useEffect(() => {
     const timer = window.setInterval(() => setCountdown(Math.max(0, openingTarget - Date.now())), 1000)
     return () => window.clearInterval(timer)
   }, [openingTarget])
+
   const countdownParts = {
     days: Math.floor(countdown / 86400000),
     hours: Math.floor((countdown / 3600000) % 24),
     minutes: Math.floor((countdown / 60000) % 60),
     seconds: Math.floor((countdown / 1000) % 60),
   }
+
   useEffect(() => {
     if (!selectedDrink && !selectedEvent) return
     const previousOverflow = document.body.style.overflow
@@ -39,58 +52,44 @@ function App() {
       document.body.style.overflow = previousOverflow
     }
   }, [selectedDrink, selectedEvent])
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMenuOpen(false)
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
+  useEffect(() => {
+    const sections = ['eventos', 'vermut', 'carta', 'ubicacion']
+      .map(id => document.getElementById(id))
+      .filter((section): section is HTMLElement => Boolean(section))
+    const observer = new IntersectionObserver(entries => {
+      const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+      if (visible) setActiveSection(visible.target.id)
+    }, { rootMargin: '-20% 0px -65% 0px', threshold: [0, 0.2, 0.5] })
+    sections.forEach(section => observer.observe(section))
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <div className="site">
-      <header className="nav">
-        <a className="wordmark" href="#top" aria-label="VERA, inicio">VERA<span className="dot">.</span></a>
-        <nav className="nav-links" aria-label="Navegación principal">
-          <a href="#eventos">Eventos</a><a href="#vermut">Vermuteo</a><a href="#carta">Carta</a><a href="#ubicacion">Dónde</a>
-        </nav>
-        <a className="nav-cta" href="#ubicacion">VEN A VERA <Arrow /></a>
-        <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-controls="mobile-menu" aria-label="Abrir menú">{menuOpen ? 'CERRAR' : 'MENÚ'}</button>
-      </header>
-      <nav id="mobile-menu" className={`mobile-menu ${menuOpen ? 'open' : ''}`} aria-label="Navegación móvil">
-        <a href="#eventos" onClick={closeMenu}>EVENTOS <Arrow /></a>
-        <a href="#vermut" onClick={closeMenu}>VERMUTEO <Arrow /></a>
-        <a href="#carta" onClick={closeMenu}>CARTA <Arrow /></a>
-        <a href="#ubicacion" onClick={closeMenu}>CÓMO LLEGAR <Arrow /></a>
-      </nav>
+      <Header activeSection={activeSection} menuOpen={menuOpen} onToggleMenu={() => setMenuOpen(!menuOpen)} onCloseMenu={closeMenu} />
 
       <main id="top">
-        <section className="hero section-blue">
-          <div className="hero-noise" />
-          <div className="hero-topline"><span>BAR LÉSBICO EN HUELIN</span><span>MÁLAGA · HUELIN</span></div>
-          <div className="hero-main">
-            <p className="eyebrow hero-kicker">Bar lésbico en Huelin</p>
-            <img className="hero-brand-image" src="/images/web/Hero web.png" alt="VERA" />
-            <p className="hero-offer">Vermut · gildas · copas · tardeo</p>
-          </div>
-          <div className="hero-visual"><img src={visualAssets.hero} alt="Vermut de VERA" /><span>IMAGEN DE REFERENCIA · REEMPLAZABLE</span></div>
-          <div className="hero-copy">Un bar de lesbianas<br />para ver qué pasa.</div>
-          <div className="hero-actions"><a className="button button-cream" href="#ubicacion">VEN A VERA <Arrow /></a><a className="hero-text-link" href="#carta">VER LA CARTA <Arrow /></a></div>
-          <VeraSpark />
-          <div className="hero-stamp" aria-hidden="true">BAR<br />LÉSBICO<br />HUELIN</div>
-          <div className="hero-facts"><span>MAR–JUE 18:00–00:00</span><span>VIE–SÁB 18:00–02:00</span><span>PL. MORENO VILLA, 2 · HUELIN</span></div>
-          <div className="hero-manifesto"><span>UN BAR DE LESBIANAS</span><span>PARA QUEDAR · TOMAR · DISFRUTAR</span></div>
-        </section>
+        <Hero />
 
         <div className="marquee" aria-hidden="true"><span>VERA · VERA · VERA · VERA · VERA · VERA ·</span></div>
 
-        <section className="opening-countdown section-cream" aria-label="Cuenta atrás para la apertura tentativa">
-          <div className="countdown-layout"><div><div className="countdown-label">PRÓXIMA APERTURA · FECHA TENTATIVA</div><strong className="countdown-date">5 NOV.</strong></div><div className="countdown-clock" aria-live="polite"><div><strong>{countdownParts.days}</strong><span>DÍAS</span></div><div><strong>{String(countdownParts.hours).padStart(2, '0')}</strong><span>HORAS</span></div><div><strong>{String(countdownParts.minutes).padStart(2, '0')}</strong><span>MIN.</span></div><div><strong>{String(countdownParts.seconds).padStart(2, '0')}</strong><span>SEG.</span></div></div></div>
-          <p className="countdown-note">La fecha todavía está por confirmar. Cuando lo sepamos, lo contamos.</p>
-        </section>
+        <Countdown parts={countdownParts} />
 
-        <section id="eventos" className="events section-cream">
-          <div className="section-label">01 / QUÉ PASA</div><div className="heading-row"><h2>ESTA<br /><i>SEMANA.</i></h2><span className="scribble">SIEMPRE<br />ALGO</span></div>
-          <article className="featured-event"><button className="event-placeholder" onClick={() => setSelectedEvent(events[0])} aria-label={`Ver cartel grande de ${events[0].title}`}>{events[0].image ? <img src={events[0].image} alt={`Cartel de ${events[0].title}`} /> : <><VeraSpark /><b>CARTEL<br />EN<br />PREPARACIÓN</b></>}<span className="poster-hint">VER CARTEL ↗</span></button><div><span className="card-type">{events[0].category}</span><h3>{events[0].title}</h3><p className="event-meta">{events[0].date} · {events[0].time}</p><p>{events[0].description}</p></div><a className="button button-blue" href="#ubicacion">{events[0].cta} <Arrow /></a></article>
-          <div className="event-grid">{[events[1], events[3]].map(event => <article className={`event-card ${event.image ? 'has-poster' : ''}`} key={event.title} role={event.image ? 'button' : undefined} tabIndex={event.image ? 0 : undefined} onClick={event.image ? () => setSelectedEvent(event) : undefined} onKeyDown={event.image ? (keyboardEvent) => { if (keyboardEvent.key === 'Enter' || keyboardEvent.key === ' ') { keyboardEvent.preventDefault(); setSelectedEvent(event) } } : undefined}><div className="event-card-poster">{event.image ? <img src={event.image} alt={`Cartel de ${event.title}`} /> : <><VeraSpark /><span>CARTEL<br />EN PREPARACIÓN</span></>}</div><div className="event-card-copy"><span className="card-type">{event.category}</span><h3>{event.title}</h3><p className="event-meta">{event.date} · {event.time}</p><p>{event.description}</p><a className="text-link" href="#ubicacion" onClick={(clickEvent) => clickEvent.stopPropagation()}>{event.cta} <Arrow /></a></div></article>)}</div>
-        </section>
+        <EventsSection onSelectEvent={setSelectedEvent} showUpcoming={showUpcoming} onToggleUpcoming={() => setShowUpcoming(!showUpcoming)} />
 
         <section className="taste-preview section-cream" aria-labelledby="taste-preview-title">
           <div className="section-label">02 / PARA EMPEZAR</div>
-          <div className="taste-heading"><div><p className="eyebrow">LO QUE SE PIDE EN VERA</p><h2 id="taste-preview-title">UNA DE<br /><i>CADA.</i></h2></div><p>Vermut, gildas y copas para que la tarde empiece como te apetece.</p></div>
-          <div className="taste-grid">{experienceCards.map(card => <article className={`taste-card taste-card-${card.id}`} key={card.id}><div className="taste-visual">{card.image ? <img src={card.image} alt={`${card.title} de VERA`} /> : <span className="taste-placeholder"><VeraSpark />FOTO PRÓXIMAMENTE</span>}<small>IMAGEN DE REFERENCIA · REEMPLAZABLE</small></div><span className="card-type">{card.label}</span><h3>{card.title}</h3><p>{card.description}</p><a className="text-link" href={card.id === 'vermut' ? '#vermut' : card.id === 'gildas' ? '#gildas' : '#carta'}>VER MÁS <Arrow /></a></article>)}</div>
+          <div className="taste-heading"><div><p className="eyebrow">QUÉ ENCUENTRAS EN VERA</p><h2 id="taste-preview-title">UNA DE<br /><i>CADA.</i></h2></div><p>Vermut, gildas y tardeo para que la tarde empiece como te apetece.</p></div>
+          <div className="taste-grid">{experienceCards.map(card => <article className={`taste-card taste-card-${card.id}`} key={card.id}><div className="taste-visual">{card.image ? <img src={card.image} alt={`${card.title} de VERA`} /> : <span className="taste-placeholder"><VeraSpark />FOTO PRÓXIMAMENTE</span>}<small>FOTO PRÓXIMAMENTE</small></div><span className="card-type">{card.label}</span><h3>{card.title}</h3><p>{card.description}</p><a className="text-link" href={card.id === 'vermut' ? '#vermut' : card.id === 'gildas' ? '#gildas' : '#carta'}>VER MÁS <Arrow /></a></article>)}</div>
         </section>
 
         <section className="intro section-cream">
@@ -122,31 +121,25 @@ function App() {
         <section id="gildas" className="gildas-hero section-cream">
           <div className="section-label">05 / PARA PINCHAR</div>
           <div className="gildas-intro"><h2>9 FORMAS<br /><i>DE PINCHAR.</i></h2><p>Gildas para abrir la tarde. La clásica, la hot y la VERA de la casa.</p></div>
-          <div className="gilda-cards">{gildas.map((gilda, index) => <article key={gilda.name} className={`gilda-card gilda-${index % 3}`}>{gilda.image && <img className="gilda-photo" src={gilda.image} alt={`Gilda ${gilda.name} de VERA`} onError={(event) => { event.currentTarget.hidden = true }} />}<span>0{index + 1}</span><div className="gilda-skewer" aria-hidden="true"><i></i><i></i><i></i></div><h3>{gilda.name}</h3><p>{gilda.description}</p></article>)}</div>
+          <div className="gilda-cards">{gildas.map((gilda, index) => <article key={gilda.name} className={`gilda-card gilda-${index % 3}`}>{gilda.image ? <img className="gilda-photo" src={gilda.image} alt={`Gilda ${gilda.name} de VERA`} onError={(event) => { event.currentTarget.hidden = true }} /> : <div className="gilda-photo-placeholder">FOTO PRÓXIMAMENTE</div>}<span>0{index + 1}</span><div className="gilda-skewer" aria-hidden="true"><i></i><i></i><i></i></div><h3>{gilda.name}</h3><p>{gilda.description}</p><strong className="gilda-price">{gilda.price}</strong></article>)}</div>
         </section>
 
-        <section id="carta" className="menu section-cream">
-          <div className="section-label">06 / CARTA</div>
-          <div className="heading-row"><h2>PARA<br /><i>PICAR.</i></h2><span className="scribble">SIN PRISA<br />Y CON OTRA</span></div>
-          <div className="tabs" role="tablist" aria-label="Categorías de la carta">{tabs.map(tab => <button key={tab} className={activeTab === tab ? 'active' : ''} onClick={() => setActiveTab(tab)} role="tab" aria-selected={activeTab === tab}>{tab}</button>)}</div>
-          <div className="menu-list">{menu[activeTab].map(item => <article className="menu-item" key={item.name}><div><h3>{item.name}</h3><p>{item.description}</p></div><span>{item.price}</span></article>)}</div>
-          <p className="provisional">* LAS CONSUMICIONES SE ABONAN AL REALIZAR EL PEDIDO · INCLUYEN PICOTEO DE LA CASA</p>
-        </section>
+        <MenuSection activeTab={activeTab} onSelectTab={setActiveTab} />
 
         <section className="gilda-month">
           <div className="month-art" aria-hidden="true"><VeraSpark /><div className="skewer"><i></i><i></i><i></i></div></div>
           <div className="month-copy"><div className="section-label">07 / CADA MES</div><p className="eyebrow">GILDA DEL MES · {gildaOfMonth.month}</p><h2>{gildaOfMonth.name}</h2><p>{gildaOfMonth.description}</p><p className="ingredients">{gildaOfMonth.ingredients.join(' · ')}</p><strong>{gildaOfMonth.price}</strong><br /><a className="text-link" href="#ubicacion">VEN A PROBARLA <Arrow /></a></div>
         </section>
 
-        <section className="instagram section-blue"><div className="section-label light">08 / NOS VEMOS</div><h2>@VERA</h2><p>Estamos preparando todo.<br />Pronto habrá fotos, tardes y motivos para volver.</p><div className="insta-grid">{[<VeraSpark key="spark" />,'VERA','◉','✹'].map((x,i)=><div className={`insta-tile tile-${i}`} key={i}>{x}<small>FOTO PRÓXIMAMENTE</small></div>)}</div>{config.instagramUrl !== 'INSTAGRAM_URL' && <a className="button button-cream" href={config.instagramUrl}>VER INSTAGRAM <Arrow /></a>}</section>
-
-        <section id="ubicacion" className="location section-cream"><div><div className="section-label">09 / VEN A VERA</div><h2>NOS VEMOS<br /><i>EN HUELIN.</i></h2><p className="opening-status">{config.openingStatus}</p><address>{config.address}<br />{config.area}</address><p className="hours">{config.hours}</p><p className="saturday-noon">{config.saturdayNoon}</p><div className="location-actions"><a className="button button-blue" href={config.mapsUrl} target="_blank" rel="noreferrer">CÓMO LLEGAR <Arrow /></a></div></div><div className="map-placeholder"><iframe title="Mapa de VERA en Plaza Moreno Villa, Málaga" src="https://www.google.com/maps?q=Plaza%20Moreno%20Villa%202%2C%20M%C3%A1laga&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe><a className="map-badge" href={config.mapsUrl} target="_blank" rel="noreferrer">VERA ↗</a></div></section>
+        <InstagramSection />
+        <LocationSection whatsappUrl={whatsappUrl} />
+        <FinalCta />
       </main>
 
       <footer className="footer section-blue"><span>VERA<span className="dot">.</span></span><span>PLAZA MORENO VILLA 2 · HUELIN</span><a href="#top">VOLVER ARRIBA ↑</a></footer>
-      <a className="mobile-cta" href="#ubicacion">VEN A VERA <Arrow /></a>
-      {selectedDrink && <div className="drink-modal-backdrop" role="presentation" onClick={() => setSelectedDrink(null)}><div className="drink-modal" role="dialog" aria-modal="true" aria-labelledby="drink-modal-title" onClick={(event) => event.stopPropagation()}><div className="modal-header"><span className="card-type">FOTO / VERMUTEO</span><button className="modal-close" onClick={() => setSelectedDrink(null)} aria-label="Cerrar foto">CERRAR <span aria-hidden="true">×</span></button></div>{selectedDrink.image ? <div className="drink-photo"><img src={selectedDrink.image} alt={`Foto de ${selectedDrink.name}`} /></div> : <div className="drink-photo-placeholder"><VeraSpark /><span>FOTO DEL TRAGO<br />PRÓXIMAMENTE</span></div>}<span className="card-type">VERA MIX · {selectedDrink.kind === 'firma' ? 'DE LA CASA' : 'DE BARRA'}</span><h2 id="drink-modal-title">{selectedDrink.name}</h2><p>{selectedDrink.note}</p><strong>{selectedDrink.price}</strong></div></div>}
-      {selectedEvent && <div className="drink-modal-backdrop event-viewer-backdrop" role="presentation" onClick={() => setSelectedEvent(null)}><div className="event-modal event-viewer" role="dialog" aria-modal="true" aria-label={`Flyer de ${selectedEvent.title}`} onClick={(event) => event.stopPropagation()}><div className="modal-header"><span className="card-type">FOTO / EVENTO</span><button className="modal-close" onClick={() => setSelectedEvent(null)} aria-label="Cerrar flyer">CERRAR <span aria-hidden="true">×</span></button></div><div className="event-modal-poster"><img src={selectedEvent.image} alt={`Flyer de ${selectedEvent.title}`} /></div></div></div>}
+      <div className="mobile-fixed-actions"><nav className="mobile-fixed-nav" aria-label="Accesos rápidos"><a href="#eventos">EVENTOS</a><a href="#carta">CARTA</a><a href={config.mapsUrl} target="_blank" rel="noreferrer">CÓMO LLEGAR</a></nav><a className="mobile-cta" href="#ubicacion">VEN A VERA <Arrow /></a></div>
+      {selectedDrink && <DrinkModal drink={selectedDrink} onClose={() => setSelectedDrink(null)} />}
+      {selectedEvent && <EventModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />}
     </div>
   )
 }

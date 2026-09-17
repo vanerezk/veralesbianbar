@@ -1,23 +1,35 @@
 export const config = {
-  instagramUrl: 'INSTAGRAM_URL',
+  instagramUrl: 'https://www.instagram.com/veralesbianbar/',
+  allergensPdfUrl: '',
+  openingDate: '2026-11-05T18:00:00+01:00',
+  openingDateConfirmed: false,
   mapsUrl: 'https://www.google.com/maps/place//data=!4m2!3m1!1s0xd72f7175aabb7eb:0x9b9f29c3358dc8e6?sa=X&ved=1t:8290&ictx=111',
   phone: 'PHONE',
+  whatsappPhone: '',
   address: 'Pl. Moreno Villa, 2',
   area: 'Carretera de Cádiz, 29002 Málaga',
   hours: 'MARTES Y MIÉRCOLES 18:00–00:00 · JUEVES 18:00–00:00 · VIERNES Y SÁBADO 18:00–02:00 · DOMINGO 18:00–00:00',
   openingStatus: 'PRÓXIMA APERTURA · 5 NOVIEMBRE (POR CONFIRMAR)',
-  openingDate: '5 NOVIEMBRE · FECHA POR CONFIRMAR',
+  openingDateLabel: '5 NOVIEMBRE · FECHA POR CONFIRMAR',
   saturdayNoon: 'SÁBADOS AL MEDIODÍA · POSIBLE APERTURA ESPECIAL',
 }
 
 // Keep replaceable visual assets in one place so the temporary artwork can be
 // swapped for the bar's own photography without changing the layout.
 export const visualAssets = {
-  hero: '/images/vermut/vermut de grifo.png',
-  vermut: '/images/vermut/vermut de grifo.png',
-  gildas: '/images/gildas/gilda vera.png',
+  hero: '',
+  vermut: '',
+  gildas: '',
   copas: '',
 } as const
+
+export const instagramPosts = [
+  {
+    image: '/images/instagram/Primer posteo.png',
+    alt: 'Primera publicación de VERA en Instagram',
+    label: 'VER EN INSTAGRAM ↗',
+  },
+] as const
 
 export const experienceCards = [
   {
@@ -25,40 +37,40 @@ export const experienceCards = [
     title: 'Vermut',
     description: 'De barra o de la casa, para empezar la tarde sin prisa.',
     image: visualAssets.vermut,
-    label: 'DE BARRA · DE LA CASA',
+    label: 'VERMUT',
   },
   {
     id: 'gildas',
     title: 'Gildas',
     description: 'Clásicas, hot y de autor. Una para abrir boca, otra para quedarse.',
     image: visualAssets.gildas,
-    label: 'PINCHOS · ENCURTIDOS',
+    label: 'GILDAS',
   },
   {
     id: 'copas',
-    title: 'Copas',
-    description: 'Combinados, cervezas y otra ronda cuando cae la tarde.',
+    title: 'Tardeo',
+    description: 'Copas, música y otra ronda cuando cae la tarde.',
     image: visualAssets.copas,
-    label: 'TARDEO · OTRA RONDA',
+    label: 'TARDEO',
   },
 ] as const
 
 export type MenuItem = { name: string; description: string; price: string; image?: string }
 
 export const gildas: MenuItem[] = [
-  { name: 'Clásica', description: 'aceituna · piparra · anchoa', price: '2 €', image: '/images/gildas/gilda clasica.png' },
-  { name: 'Boquerona', description: 'aceituna · piparra · boquerón', price: '2,20 €', image: '/images/gildas/gilda boquerona.png' },
-  { name: 'Atún', description: 'atún · queso', price: '3 €', image: '/images/gildas/gilda atun.png' },
-  { name: 'Tomate', description: 'tomate seco · queso crema', price: '2,50 €', image: '/images/gildas/gilda tomate.png' },
-  { name: 'Hot', description: 'aceituna + queso · jalapeño', price: '2,50 €', image: '/images/gildas/gilda hot.png' },
-  { name: 'Pimiento', description: 'pimiento relleno queso · aceituna · piparra', price: '3 €', image: '/images/gildas/gilda pimiento.png' },
-  { name: 'Vera', description: '½ aceituna · boquerón · anchoa · ½ aceituna', price: '3 €', image: '/images/gildas/gilda vera.png' },
-  { name: 'Deconstruída', description: 'regañá · queso crema · anchoa', price: '3 €', image: '/images/gildas/gilda descontruida.png' },
-  { name: 'Musa', description: 'cherry · perla de mozzarella · pesto', price: '3 €', image: '/images/gildas/gilda musa.png' },
+  { name: 'Clásica', description: 'aceituna · piparra · anchoa', price: '2 €' },
+  { name: 'Boquerona', description: 'aceituna · piparra · boquerón', price: '2,20 €' },
+  { name: 'Atún', description: 'atún · queso', price: '3 €' },
+  { name: 'Tomate', description: 'tomate seco · queso crema', price: '2,50 €' },
+  { name: 'Hot', description: 'aceituna + queso · jalapeño', price: '2,50 €' },
+  { name: 'Pimiento', description: 'pimiento relleno queso · aceituna · piparra', price: '3 €' },
+  { name: 'Vera', description: '½ aceituna · boquerón · anchoa · ½ aceituna', price: '3 €' },
+  { name: 'Deconstruída', description: 'regañá · queso crema · anchoa', price: '3 €' },
+  { name: 'Musa', description: 'cherry · perla de mozzarella · pesto', price: '3 €' },
 ]
 
 const vermutMenu: MenuItem[] = [
-  { name: 'Vermut de grifo', description: 'de barra', price: '4 €', image: '/images/vermut/vermut de grifo.png' },
+  { name: 'Vermut de grifo', description: 'de barra', price: '4 €' },
   { name: 'Vermut blanco', description: 'blanco', price: '3 €' },
   { name: 'Beermouth', description: 'vermut rojo · cerveza · naranja · aceituna', price: '4 €' },
   { name: 'Vera', description: 'vermut rojo · ginebra · naranja · soda · aceituna', price: '5 €' },
@@ -142,9 +154,9 @@ export const gildaOfMonth = {
   image: '',
 }
 
-export const events: { date: string; time: string; title: string; description: string; category: string; image: string; cta: string }[] = [
-  { date: 'FECHA POR CONFIRMAR', time: 'DESDE LAS 18H', title: 'TARDEO DE TATUAJES', description: 'Tatuajes profesionales por mi artista favorita. Diseños personalizados y únicos. Amplia selección de estilos. Ambiente seguro y esterilizado. 40 € por tatuaje.', category: 'TARDEO · TATUAJES', image: '/images/eventos/evento tattoo.jpg', cta: 'VEN A VERA' },
-  { date: 'PRÓXIMO JUEVES', time: 'DESDE LAS 19H', title: 'CREA TU GILDA', description: 'Diseña tu propia gilda de autor, participa en la votación popular y haz que la ganadora se quede en carta un mes. Inscripciones en barra o por DM.', category: 'EVENTO · CONCURSO', image: '/images/eventos/Evento gilda.jpg', cta: 'VEN A VERA' },
-  { date: 'PRÓXIMAMENTE', time: 'HORA POR CONFIRMAR', title: 'TAROT EN VERA', description: 'Una tarde de cartas, intuición y conversación en el bar.', category: 'PRÓXIMO · TAROT', image: '/images/eventos/Evento tarot.jpg', cta: 'VEN A VERA' },
-  { date: 'PRÓXIMAMENTE', time: 'HORA POR CONFIRMAR', title: 'BINGO EN VERA', description: 'Bingo, premios y una excusa más para alargar la tarde.', category: 'PRÓXIMO · BINGO', image: '/images/eventos/Evento bingo.jpg', cta: 'VEN A VERA' },
+export const events: { date: string; time: string; status: string; title: string; description: string; category: string; image: string; cta: string }[] = [
+  { date: 'FECHA POR CONFIRMAR', time: 'DESDE LAS 18H', status: 'PRÓXIMAMENTE', title: 'TARDEO DE TATUAJES', description: 'Tatuajes profesionales por mi artista favorita. Diseños personalizados y únicos. Amplia selección de estilos. Ambiente seguro y esterilizado. 40 € por tatuaje.', category: 'TARDEO · TATUAJES', image: '/images/eventos/evento tattoo.jpg', cta: 'VEN A VERA' },
+  { date: 'FECHA POR CONFIRMAR', time: 'HORA POR CONFIRMAR', status: 'PRÓXIMAMENTE', title: 'CREA TU GILDA', description: 'Diseña tu propia gilda de autor, participa en la votación popular y haz que la ganadora se quede en carta un mes. Inscripciones en barra o por DM.', category: 'EVENTO · CONCURSO', image: '/images/eventos/Evento gilda.jpg', cta: 'VEN A VERA' },
+  { date: 'FECHA POR CONFIRMAR', time: 'HORA POR CONFIRMAR', status: 'PRÓXIMAMENTE', title: 'TAROT EN VERA', description: 'Una tarde de cartas, intuición y conversación en el bar.', category: 'PRÓXIMO · TAROT', image: '/images/eventos/Evento tarot.jpg', cta: 'VEN A VERA' },
+  { date: 'FECHA POR CONFIRMAR', time: 'HORA POR CONFIRMAR', status: 'PRÓXIMAMENTE', title: 'BINGO EN VERA', description: 'Bingo, premios y una excusa más para alargar la tarde.', category: 'PRÓXIMO · BINGO', image: '/images/eventos/Evento bingo.jpg', cta: 'VEN A VERA' },
 ]

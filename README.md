@@ -1,84 +1,47 @@
-# VERA — Bar lésbico en Málaga
+# VERA
 
-VERA es una web responsive de una sola página para un bar lésbico en Huelin, Málaga. Presenta la identidad del bar, la carta de comida y bebida, los próximos eventos, la información de apertura y la ubicación mediante una interfaz visual de estilo editorial.
+Web oficial de VERA, un bar lésbico en Málaga. El proyecto presenta la identidad
+visual del local, sus eventos, la carta, las publicaciones manuales de Instagram y
+la información de ubicación en una experiencia responsive de una sola página.
 
-## Funcionalidades
+## Características
 
-- Diseño responsive para pantallas de escritorio y dispositivos móviles.
-- Sección principal con la identidad de VERA, llamadas a la acción y cuenta atrás para la apertura.
-- Sección de eventos destacados con detalles y previsualización de carteles.
-- Carta de vermut dividida entre clásicos de barra y combinaciones propias de VERA.
-- Tarjetas interactivas de bebidas con imágenes y ventanas modales de detalle.
-- Galería de gildas con imágenes y descripciones.
-- Carta filtrable por categorías:
-  - Picoteo
-  - Gildas
-  - Vermut
-  - Cervezas
-  - Vinos
-  - Copitas
-  - Combinados
-- Sección especial para la gilda del mes.
-- Sección de Instagram preparada para añadir el enlace al perfil social.
-- Sección de ubicación con información de apertura, dirección y mapa de Google integrado.
-- Menú de navegación móvil y llamada a la acción fija para visitar VERA.
-- Elementos interactivos accesibles, con soporte de teclado para las tarjetas de eventos y cierre de ventanas modales mediante la tecla Escape.
+- Diseño editorial responsive para escritorio y móvil.
+- Identidad visual basada en azul, blanco y coral.
+- Hero con llamada a la acción y cuenta atrás de apertura.
+- Eventos destacados con carteles ampliables.
+- Carta filtrable por categorías.
+- Secciones de vermut, gildas, tardeo y gilda del mes.
+- Publicaciones manuales de Instagram.
+- Información de ubicación y mapa integrado.
+- Navegación móvil y llamadas a la acción adaptadas.
+- Componentes interactivos con soporte de teclado.
+- Soporte para reducir animaciones según las preferencias del sistema.
 
-## Tecnologías
+## Tecnología
 
-- React 18
+- React
 - TypeScript
 - Vite
 - CSS
 
-## Cómo empezar
-
-### Requisitos
-
-- Node.js y npm
-
-### Instalar las dependencias
-
-Desde el directorio del proyecto, ejecuta:
-
-```bash
-npm install
-```
-
-### Iniciar el servidor de desarrollo
-
-```bash
-npm run dev
-```
-
-Vite mostrará la URL local en la terminal, normalmente `http://localhost:5173`.
-
-### Crear una compilación de producción
-
-```bash
-npm run build
-```
-
-Los archivos optimizados se generan en el directorio `dist/`.
-
-### Previsualizar la compilación de producción
-
-```bash
-npm run preview
-```
-
-## Estructura del proyecto
+## Estructura
 
 ```text
-├── public/images/     # Imágenes utilizadas en la web
-├── src/App.tsx        # Página principal y componentes interactivos
-├── src/data.ts        # Contenido de la carta, eventos y local
-├── src/main.tsx       # Punto de entrada de React
-├── src/styles.css     # Estilos y diseños responsive
-├── index.html         # Metadatos HTML e información SEO
-└── vite.config.ts     # Configuración de Vite
+├── public/images/           # Recursos visuales públicos
+├── public/images/instagram/ # Publicaciones manuales
+├── src/components/          # Componentes reutilizables
+├── src/App.tsx              # Composición principal
+├── src/data.ts              # Contenido editable de la web
+├── src/main.tsx             # Punto de entrada
+├── src/styles.css           # Sistema visual y responsive
+├── index.html               # Metadatos y SEO
+└── vite.config.ts           # Configuración de Vite
 ```
 
-## Configuración del contenido
+## Privacidad
 
-Los datos del local, el horario, la URL del mapa, el enlace a redes sociales, las cartas y los eventos están definidos en `src/data.ts`. Sustituye valores provisionales como `INSTAGRAM_URL` y `PHONE` cuando estén disponibles los datos definitivos del negocio.
+Este repositorio no contiene credenciales, tokens, archivos de entorno ni datos
+privados. La información editable del negocio se mantiene separada de cualquier
+secreto de infraestructura y los archivos `.env` están excluidos del control de
+versiones.
