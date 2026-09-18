@@ -45,3 +45,5 @@ Este repositorio no contiene credenciales, tokens, archivos de entorno ni datos
 privados. La información editable del negocio se mantiene separada de cualquier
 secreto de infraestructura y los archivos `.env` están excluidos del control de
 versiones.
+
+VREZK
